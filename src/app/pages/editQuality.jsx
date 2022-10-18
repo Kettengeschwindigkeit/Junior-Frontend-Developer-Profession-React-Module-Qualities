@@ -1,19 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import axios from "axios";
 import EditForm from "../components/ui/editForm";
-
-axios.interceptors.response.use(
-    (res) => res,
-    function (error) {
-        console.log("Interceptor");
-        const expectedErrors = error.response && error.response.status >= 400 && error.response.status < 500;
-        if (!expectedErrors) {
-            console.log("Unexpected Error");
-        }
-        return Promise.reject(error)
-    }
-);
+import httpService from "../services/http.service";
 
 const EditQualityPage = () => {
     const [quality, setQuality] = useState(null);
@@ -23,7 +11,7 @@ const EditQualityPage = () => {
 
     const handleSubmit = async (data) => {
         try {
-            await axios
+            await httpService
                 .put(qualityEndPoint, data)
                 .then(res => console.log(res.data.content));
         } catch (error) {
@@ -33,7 +21,7 @@ const EditQualityPage = () => {
     };
 
     useEffect(async () => {
-        const { data } = await axios.get(qualityEndPoint);
+        const { data } = await httpService.get(qualityEndPoint);
         setQuality(data.content);
     }, []);
 
