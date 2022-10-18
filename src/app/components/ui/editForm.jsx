@@ -4,12 +4,10 @@ import TextField from "../common/form/textField";
 import colors from "../../constants/colors.json";
 
 const EditForm = ({ data, onSubmit }) => {
-    console.log(data)
     const [form, setForm] = useState(data || {});
 
     const handeleSubmit = (e) => {
         e.preventDefault();
-        console.log(form);
         onSubmit(form);
     };
 
