@@ -13,7 +13,7 @@ const qualityService = {
         return data;
     },
     update: async (id, content) => {
-        const { data } = await httpService.put(qualityEndpoint + id + "sada", content);
+        const { data } = await httpService.put(qualityEndpoint + id, content);
         return data;
     }
 };

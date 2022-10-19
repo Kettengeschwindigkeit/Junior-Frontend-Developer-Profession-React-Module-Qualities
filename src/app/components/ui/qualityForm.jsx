@@ -1,21 +1,12 @@
-import React, { useState } from "react";
+import React from "react";
 import SelectField from "../common/form/selectField";
 import TextField from "../common/form/textField";
 import colors from "../../constants/colors.json";
+import useForm from "../../hooks/useForm";
 
-const CreateForm = () => {
-    const [form, setForm] = useState({});
-    const handeleSubmit = (e) => {
-        e.preventDefault();
-        console.log(form);
-    };
-    const handleChange = (target) => {
-        console.log(target);
-        setForm((prevState) => ({
-            ...prevState,
-            [target.name]: target.value,
-        }));
-    };
+const QualityForm = ({ onSubmit }) => {
+    const { form, handleChange, handeleSubmit } = useForm({}, onSubmit);
+
     return (
         <form onSubmit={handeleSubmit}>
             <TextField
@@ -36,4 +27,5 @@ const CreateForm = () => {
     );
 };
 
-export default CreateForm;
+export default QualityForm;
+ 
