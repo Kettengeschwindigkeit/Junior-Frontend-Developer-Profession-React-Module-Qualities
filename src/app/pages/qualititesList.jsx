@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import QualitiesTable from "../components/ui/qualitiesTable";
-import axios from "axios";
 import qualityService from "../services/quality.service";
 
 const QualitiesListPage = () => {
