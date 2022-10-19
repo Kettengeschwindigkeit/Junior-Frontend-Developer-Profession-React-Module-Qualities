@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { useHistory } from "react-router-dom";
 import QualitiesTable from "../components/ui/qualitiesTable";
-import qualityService from "../services/quality.service";
+import { useQualities } from "../hooks/useQualities";
 
 const QualitiesListPage = () => {
-    const [qualities, setQualities] = useState([]);
+    const {qualities} = useQualities();
     const history = useHistory();
 
     const handleEdit = (param) => {
@@ -15,10 +15,6 @@ const QualitiesListPage = () => {
     const handleDelete = (param) => {
         console.log(param);
     };
-
-    useEffect(async () => {
-        qualityService.fetchAll().then((data) => setQualities(data.content));
-    }, []);
 
     return (
         <>

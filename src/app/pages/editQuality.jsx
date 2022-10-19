@@ -26,8 +26,8 @@ const EditQualityPage = () => {
             const data = await qualityService.update(id, content);
             return data.content;
         } catch (error) {
-            const { message, code } = error.response.data;
-            setErrors({ message, code });
+            const { message } = error.response.data;
+            setErrors(message);
             toast.error(message);
         };
     };
