@@ -13,6 +13,26 @@ export const QualitiesProvider = ({ children }) => {
     const [error, setError] = useState(null);
     const [isLoading, setLoading] = useState(true);
 
+    const getQuality = (id) => {
+        return qualities.find((q) => q._id === id)
+    }
+
+    const updateQuality = async ({ _id: id, ...data }) => {
+        try {
+            const { content } = await qualityService.update(id, data);
+            setQualities((prevState) => prevState.map((item) => {
+                if (item._id === content._id) {
+                    return content
+                }
+                return item
+            }))
+            return content;
+        } catch (error) {
+            const { message } = error.response.data;
+            setError(message);
+        };
+    }
+
     useEffect(() => {
         const getQualities = async () => {
             try {
@@ -28,9 +48,8 @@ export const QualitiesProvider = ({ children }) => {
     }, []);
 
     return (
-        <QualitiesContext.Provider value={{qualities, isLoading}}>
+        <QualitiesContext.Provider value={{ qualities, getQuality, updateQuality }}>
             {!isLoading ? children : "<h1>Qualities Loading ....</h1>"}
-            {children}
         </QualitiesContext.Provider>
     );
 };
