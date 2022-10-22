@@ -13,6 +13,17 @@ export const QualitiesProvider = ({ children }) => {
     const [error, setError] = useState(null);
     const [isLoading, setLoading] = useState(true);
 
+    const addQuality = async (data) => {
+        try {
+            const { content } = await qualityService.create(data);
+            setQualities((prevState) => [...prevState, content]);
+            return content;
+        } catch (error) {
+            const { message } = error.response.data;
+            setError(message);
+        };
+    };
+
     const getQuality = (id) => {
         return qualities.find((q) => q._id === id)
     }
@@ -48,7 +59,7 @@ export const QualitiesProvider = ({ children }) => {
     }, []);
 
     return (
-        <QualitiesContext.Provider value={{ qualities, getQuality, updateQuality }}>
+        <QualitiesContext.Provider value={{ qualities, getQuality, updateQuality, addQuality }}>
             {!isLoading ? children : "<h1>Qualities Loading ....</h1>"}
         </QualitiesContext.Provider>
     );
