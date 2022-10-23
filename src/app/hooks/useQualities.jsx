@@ -21,24 +21,20 @@ export const QualitiesProvider = ({ children }) => {
             setQualities((prevState) => [...prevState, content]);
             return content;
         } catch (error) {
-            const { message } = error.response.data;
-            setError(message);
+            errorCatcher(error)
         };
     };
 
     const deleteQuality = async (id) => {
         prevState.current = qualities;
-
-        setQualities(prevState => {
-            return prevState.filter(item => item._id !== id)
-        })
         try {
-            await qualityService.delete(id)
+            const { content } = await qualityService.delete(id)
+            setQualities(prevState => {
+                return prevState.filter(item => item._id !== content._id)
+            })
+            return content
         } catch (error) {
-            const { message } = error.response.data;
-            toast("Object not deleted");
-            setError(message);
-            setQualities(prevState.current);
+            errorCatcher(error)
         }
     };
 
@@ -57,10 +53,14 @@ export const QualitiesProvider = ({ children }) => {
             }))
             return content;
         } catch (error) {
-            const { message } = error.response.data;
-            setError(message);
+            errorCatcher(error)
         };
     }
+
+    function errorCatcher(error) {
+        const { message } = error.response.data;
+        setError(message);
+    };
 
     useEffect(() => {
         const getQualities = async () => {
@@ -75,6 +75,13 @@ export const QualitiesProvider = ({ children }) => {
         };
         getQualities();
     }, []);
+
+    useEffect(() => {
+        if (error !== null) {
+            toast(error);
+            setError(null);
+        }
+    }, [error]);
 
     return (
         <QualitiesContext.Provider value={{ qualities, getQuality, updateQuality, addQuality, deleteQuality }}>
