@@ -1,11 +1,10 @@
 import React from "react";
-import { useParams } from "react-router-dom";
-import qualityService from "../services/quality.service";
-import { toast } from "react-toastify";
+import { useHistory, useParams } from "react-router-dom";
 import QualityForm from "../components/ui/qualityForm";
 import { useQualities } from "../hooks/useQualities";
 
 const EditQualityPage = () => {
+    const history = useHistory();
     const id = useParams().id;
     const { getQuality, updateQuality } = useQualities();
     const quality = getQuality(id);
@@ -13,7 +12,7 @@ const EditQualityPage = () => {
     console.log(quality);
 
     const handleSubmit = (data) => {
-        updateQuality(data);
+        updateQuality(data).then(data => { if (data) history.push("/") });
     };
 
     return (
