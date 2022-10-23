@@ -1,4 +1,5 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
+import { toast } from "react-toastify";
 import qualityService from "../services/quality.service";
 
 const QualitiesContext = React.createContext();
@@ -12,6 +13,7 @@ export const QualitiesProvider = ({ children }) => {
     const [qualities, setQualities] = useState([]);
     const [error, setError] = useState(null);
     const [isLoading, setLoading] = useState(true);
+    const prevState = useRef();
 
     const addQuality = async (data) => {
         try {
@@ -25,15 +27,18 @@ export const QualitiesProvider = ({ children }) => {
     };
 
     const deleteQuality = async (id) => {
+        prevState.current = qualities;
+
+        setQualities(prevState => {
+            return prevState.filter(item => item._id !== id)
+        })
         try {
-            const { content } = await qualityService.delete(id)
-            setQualities(prevState => {
-                return prevState.filter(item => item._id !== content._id)
-            })
-            return content
+            await qualityService.delete(id)
         } catch (error) {
             const { message } = error.response.data;
+            toast("Object not deleted");
             setError(message);
+            setQualities(prevState.current);
         }
     };
 
